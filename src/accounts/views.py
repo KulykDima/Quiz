@@ -16,7 +16,7 @@ from .utils import signer
 
 class UserRegisterView(CreateView):
     model = get_user_model()
-    template_name = 'user_register.html'
+    template_name = 'accounts/user_register.html'
     success_url = reverse_lazy('accounts:register_done')
     form_class = UserRegisterFrom
 
@@ -25,7 +25,7 @@ def user_activate(request, sign):
     try:
         username = signer.unsign(sign)
     except BadSignature:
-        return render(request, 'bad_signature.html')
+        return render(request, 'accounts/bad_signature.html')
 
     user = get_object_or_404(get_user_model(), username=username)
     if user.is_activated:
@@ -40,20 +40,20 @@ def user_activate(request, sign):
 
 
 class UserLoginView(LoginView):
-    template_name = 'user_login.html'
+    template_name = 'accounts/user_login.html'
 
 
 class UserLogoutView(LoginRequiredMixin, LogoutView):
-    template_name = 'user_logout.html'
+    template_name = 'accounts/user_logout.html'
 
 
 @login_required
 def user_profile_view(request):
-    return render(request, 'user_profile.html')
+    return render(request, 'accounts/user_profile.html')
 
 
 class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
-    template_name = 'user_profile_update.html'
+    template_name = 'accounts/user_profile_update.html'
     model = get_user_model()
     success_url = reverse_lazy('accounts:profile')
     form_class = UserUpdateForm
