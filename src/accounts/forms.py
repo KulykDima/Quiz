@@ -71,6 +71,7 @@ class ActivationLetterAgain(forms.ModelForm):
         user_register.send(None, instance=user)
 
         return user
+
     class Meta:
         model = get_user_model()
         fields = ('email', )
