@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, include
 from django.views.generic import TemplateView
 
+from .views import EmailAgain
 from .views import UserLoginView
 from .views import UserLogoutView
 from .views import UserProfileUpdateView
@@ -19,4 +20,5 @@ urlpatterns = [
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path('profile/', user_profile_view, name='profile'),
     path('profile/update/', UserProfileUpdateView.as_view(), name='profile_update'),
+    path('resendlink/', EmailAgain.as_view(), name='activation_again')
 ]
