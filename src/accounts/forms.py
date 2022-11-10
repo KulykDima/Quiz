@@ -62,15 +62,6 @@ class UserRegisterFrom(forms.ModelForm):
 
 
 class ActivationLetterAgain(forms.ModelForm):
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        if commit:
-            user.save()
-
-        user_register.send(None, instance=user)
-
-        return user
     class Meta:
         model = get_user_model()
         fields = ('email', )

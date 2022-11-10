@@ -10,7 +10,8 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import UpdateView
 
-from .forms import UserRegisterFrom, UserUpdateForm, ActivationLetterAgain
+from .apps import user_register
+from .forms import ActivationLetterAgain, UserRegisterFrom, UserUpdateForm
 from .utils import signer
 
 
@@ -29,6 +30,23 @@ class EmailAgain(CreateView):
 
     def get_object(self, queryset=None):
         return self.request.user.username
+
+
+def send_activate_again(request):
+    form = None
+    if request.method == 'GET':
+        form = ActivationLetterAgain()
+
+    if request.method == 'POST':
+        username = request.POST.get('email')
+        user = get_object_or_404(get_user_model(), email=username)
+        print(username, user)
+        form = ActivationLetterAgain(request.POST)
+        if user.is_activated:
+            return render(request, 'accounts/user_is_activated.html')
+        user_register.send(None, instance=user)
+        return render(request, 'accounts/user_register_done.html')
+    return render(request, 'accounts/email_activate.html', {'form': form})
 
 
 def user_activate(request, sign):
