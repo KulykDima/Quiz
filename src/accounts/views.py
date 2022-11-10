@@ -22,16 +22,6 @@ class UserRegisterView(CreateView):
     form_class = UserRegisterFrom
 
 
-class EmailAgain(CreateView):
-    model = get_user_model()
-    template_name = 'accounts/email_activate.html'
-    success_url = reverse_lazy('accounts:register_done')
-    form_class = ActivationLetterAgain
-
-    def get_object(self, queryset=None):
-        return self.request.user.username
-
-
 def send_activate_again(request):
     form = None
     if request.method == 'GET':
