@@ -61,6 +61,17 @@ class UserRegisterFrom(forms.ModelForm):
         )
 
 
+class ActivationLetterAgain(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('email', )
+        exclude = (
+            'username',
+            'password1',
+            'password2',
+        )
+
+
 class UserUpdateForm(UserChangeForm):
     avatar = forms.ImageField(required=False, widget=widgets.FileInput())
     birthday = forms.DateField(required=False, widget=widgets.DateInput(attrs={'type': 'date'}))

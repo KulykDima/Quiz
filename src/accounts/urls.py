@@ -5,11 +5,11 @@ from .views import UserLoginView
 from .views import UserLogoutView
 from .views import UserProfileUpdateView
 from .views import UserRegisterView
+from .views import send_activate_again
 from .views import user_activate
 from .views import user_profile_view
 
 app_name = 'accounts'
-
 urlpatterns = [
     path('register/activate/<str:sign>/', user_activate, name='register_activate'),
     path('register/done/',
@@ -19,4 +19,5 @@ urlpatterns = [
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path('profile/', user_profile_view, name='profile'),
     path('profile/update/', UserProfileUpdateView.as_view(), name='profile_update'),
+    path('resendlink/', send_activate_again, name='activation_again')
 ]
