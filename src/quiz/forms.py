@@ -20,7 +20,7 @@ class QuestionInlineFormSet(forms.BaseInlineFormSet):
             if order > len(self.forms):
                 raise ValidationError('Order_num is bigger than count of questions!')
         lst_order = [i for i in range(1, len(self.forms) + 1)]
-        if order_num_count != lst_order:
+        if sorted(order_num_count) != lst_order:
             raise ValidationError('Not correct order num, check again')
 
 
