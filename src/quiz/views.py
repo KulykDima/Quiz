@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -33,6 +34,8 @@ class ExamDetailView(LoginRequiredMixin, DetailView, MultipleObjectMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(object_list=self.get_queryset(), **kwargs)
+        context['info'] = Result.objects.filter(exam=self.get_object()).order_by('-num_correct_answers').first()
+        context['last_run'] = Result.objects.all().order_by('state', '-create_timestamp').first()
 
         return context
 
@@ -67,6 +70,7 @@ class ExamResultCreateView(LoginRequiredMixin, CreateView):
 
 
 class ExamResultQuestionView(LoginRequiredMixin, UpdateView):
+
     def get_params(self, **kwargs):
         uuid = kwargs.get('uuid')
         res_uuid = kwargs.get('res_uuid')
@@ -98,6 +102,17 @@ class ExamResultQuestionView(LoginRequiredMixin, UpdateView):
         choices = ChoicesFormSet(data=request.POST)
         selected_choices = ['is_selected' in form.changed_data for form in choices.forms]
 
+        if selected_choices == [False] * len(selected_choices) or selected_choices == [True] * len(selected_choices):
+            messages.error(request, 'ERROR! You cant select all options or select none!')
+            return HttpResponseRedirect(
+                reverse(
+                    'quiz:question',
+                    kwargs={
+                        'uuid': uuid,
+                        'res_uuid': res_uuid,
+                    }
+                )
+            )
         result = Result.objects.get(uuid=res_uuid)
         result.update_result(order_num, question, selected_choices)
 
@@ -140,13 +155,13 @@ class ExamResultUpdateView(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         uuid = kwargs.get('uuid')
         res_uuid = kwargs.get('res_uuid')
-        user = request.user
-
-        result = Result.objects.get(
-            user=user,
-            uuid=res_uuid,
-            # exam__uuid=uuid,
-        )
+        # user = request.user
+        #
+        # result = Result.objects.get(
+        #     user=user,
+        #     uuid=res_uuid,
+        #     # exam__uuid=uuid,
+        # )
 
         return HttpResponseRedirect(
             reverse(
@@ -161,4 +176,24 @@ class ExamResultUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class ExamResultDeleteView(LoginRequiredMixin, DeleteView):
-    pass
+    model = Result
+    template_name = 'result/delete_test.html'
+    context_object_name = 'result'
+    pk_url_kwarg = 'uuid'
+    # success_url = reverse_lazy('quiz:details')
+
+    def get_object(self, queryset=None):
+        uuid = self.kwargs.get('res_uuid')
+
+        return self.get_queryset().get(uuid=uuid)
+
+    def get_success_url(self, **kwargs):
+        uuid = self.kwargs.get('uuid')
+        return (
+            reverse(
+                'quiz:details',
+                kwargs={
+                    'uuid': uuid,
+                }
+            )
+        )

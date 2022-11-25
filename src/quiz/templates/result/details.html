@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load calculate %}
+
 {% block title %}
     Test result
 {% endblock %}
@@ -32,8 +34,24 @@
                             <td>{{ result.update_timestamp }}</td>
                         </tr>
                         <tr>
+                            {% expression '(%2 - %1) * 10' result.num_incorrect_answers result.total_of_test as right %}
+                            {% expression '(%2 - %1) * 10' result.num_correct_answers result.total_of_test as outright%}
                             <td>Result</td>
-                            <td>{{ result.num_correct_answers }} / {{ result.num_incorrect_answers }}</td>
+                            <td><div class="progress">
+                                <div class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+                                     role="progressbar"
+                                     style="width: {{ right }}%"
+                                     aria-valuenow="{{ right }}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">{{ right }}%</div>
+
+                                <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated"
+                                     role="progressbar"
+                                     style="width: {{ outright }}%"
+                                     aria-valuenow="{{ outright }}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">{{ outright }}%</div>
+                            </div></td>
                         </tr>
                     </tbody>
               </table>
