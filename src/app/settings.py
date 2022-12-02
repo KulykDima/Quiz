@@ -10,7 +10,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from os import environ
 from pathlib import Path
 
-from celery.schedules import crontab
+from celery.schedules import crontab    # noqa
+
 from django.urls import reverse_lazy
 
 from dotenv import load_dotenv
@@ -183,4 +184,3 @@ if DEBUG:
 #         'schedule': crontab(minute='*/2')
 #     },
 # }
-
