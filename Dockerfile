@@ -18,6 +18,7 @@ RUN rm requirements-dev.txt
 
 COPY src .
 # COPY .env ../.env
+COPY ./dumpd.json .
 
 EXPOSE 8890
 

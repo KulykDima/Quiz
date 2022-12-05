@@ -10,8 +10,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from os import environ
 from pathlib import Path
 
-from celery.schedules import crontab    # noqa
-
 from django.urls import reverse_lazy
 
 from dotenv import load_dotenv
@@ -61,9 +59,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -90,21 +85,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / '../quiz.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": 'django.db.backends.postgresql_psycopg2',
-        "HOST": environ["POSTGRESQL_HOST"],
-        "PORT": environ["POSTGRESQL_PORT"],
-        "NAME": environ["POSTGRESQL_DB"],
-        "USER": environ["POSTGRESQL_USER"],
-        "PASSWORD": environ["POSTGRESQL_PASSWORD"],
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / '../quiz.sqlite3',
     }
 }
 
@@ -146,10 +130,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
@@ -167,20 +151,3 @@ LOGIN_REDIRECT_URL = reverse_lazy('index')
 
 if DEBUG:
     SHELL_PLUS_PRINT_SQL = True
-
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# SERVER_EMAIL = 'noreply@test.com'
-# ADMINS = [('admin', 'admin@test.com'), ]
-#
-# CELERY_BROKER_URL = environ['CELERY_BROKER']
-#
-# CELERY_BEAT_SCHEDULE = {
-#     'simple_task': {
-#         'task': 'quiz.tasks.simple_task',
-#         'schedule': crontab(minute='*/1')
-#     },
-#     'send_email_report': {
-#         'task': 'quiz.tasks.send_email_report',
-#         'schedule': crontab(minute='*/2')
-#     },
-# }
