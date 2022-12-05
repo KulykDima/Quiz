@@ -24,6 +24,7 @@
 {% endblock %}
 
 {% block content %}
+    {% include 'includes/messages.html' %}
     <div class="container">
         <form method="post" autocomplete="off">
             {% csrf_token %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Delete a Test Result
+{% endblock %}
+
+{% block header %}
+    Do you really want to remove your "{{ result.exam.title }}" result from {{ result.create_timestamp }}?
+    <div>╭━╮┈╭━╮┈┈┈┈┈╭━╮</div>
+    <div>┃╭╯┈┃┊┗━━━━━┛┊┃</div>
+    <div>┃╰┳┳┫┏━▅╮┊╭━▅┓┃</div>
+    <div>┃┫┫┫┫┃┊▉┃┊┃┊▉┃┃</div>
+    <div>┃┫┫┫╋╰━━┛▅┗━━╯╋</div>
+    <div>┃┫┫┫╋┊┊┊┣┻┫┊┊┊╋</div>
+    <div>┃┊┊┊╰┈┈┈┈┈┈┈┳━╯</div>
+    <div>┃┣┳┳━━┫┣━━┳╭╯</div>
+    <div>(Are you sure?)</div>
+{% endblock %}
+
+{% block content %}
+     <div class="row">
+        <div class="col-3"></div>
+        <div class="col" align="center">
+            <form method="post">
+                {% csrf_token %}
+                <button class="btn btn-outline-danger mt-3" type="submit">Delete</button>
+                    <a class="btn btn-outline-primary mt-3" href="{% url 'quiz:details' result.exam.uuid %}">Back to list</a>
+</form>
+                      </div>
+        <div class="col-3"></div>
+    </div>
+{% endblock %}
