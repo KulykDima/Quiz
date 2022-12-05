@@ -20,8 +20,8 @@ from django.urls import include, path
 from django.views.generic import TemplateView
 
 from task.views import get_status
-from task.views import run_task
 from task.views import home
+from task.views import run_task
 
 urlpatterns = [
     path('admin/', admin.site.urls),
