@@ -13,6 +13,16 @@ class QuestionInlineFormSet(forms.BaseInlineFormSet):
                 f'to {self.instance.QUESTION_MAX_LIMIT} inclusive'
             )
 
+        order_num_count = list(form.cleaned_data['order_num'] for form in self.forms)
+        for order in order_num_count:
+            if order > 100:
+                raise ValidationError('Order num is only in range from 1 to 100!')
+            if order > len(self.forms):
+                raise ValidationError('Order_num is bigger than count of questions!')
+        lst_order = [i for i in range(1, len(self.forms) + 1)]
+        if sorted(order_num_count) != lst_order:
+            raise ValidationError('Not correct order num, check again')
+
 
 class ChoiceInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
