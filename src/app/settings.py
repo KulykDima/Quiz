@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from os import environ
 from pathlib import Path
 
-from celery.schedules import crontab    # noqa
+from celery.schedules import crontab
 
 from django.urls import reverse_lazy
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'quiz.apps.QuizConfig',
+    'task.apps.TaskConfig',
 ]
 
 if DEBUG:
@@ -168,19 +169,20 @@ LOGIN_REDIRECT_URL = reverse_lazy('index')
 if DEBUG:
     SHELL_PLUS_PRINT_SQL = True
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# SERVER_EMAIL = 'noreply@test.com'
-# ADMINS = [('admin', 'admin@test.com'), ]
-#
-# CELERY_BROKER_URL = environ['CELERY_BROKER']
-#
-# CELERY_BEAT_SCHEDULE = {
-#     'simple_task': {
-#         'task': 'quiz.tasks.simple_task',
-#         'schedule': crontab(minute='*/1')
-#     },
-#     'send_email_report': {
-#         'task': 'quiz.tasks.send_email_report',
-#         'schedule': crontab(minute='*/2')
-#     },
-# }
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SERVER_EMAIL = 'noreply@test.com'
+ADMINS = [('admin', 'admin@test.com'), ]
+
+CELERY_BROKER_URL = environ['CELERY_BROKER']
+CELERY_RESULT_BACKEND = environ['CELERY_BACKEND']
+
+CELERY_BEAT_SCHEDULE = {
+    'simple_task': {
+        'task': 'quiz.tasks.simple_task',
+        'schedule': crontab(minute='*/1')
+    },
+    'send_email_report': {
+        'task': 'quiz.tasks.send_email_report',
+        'schedule': crontab(minute='*/2')
+    },
+}
